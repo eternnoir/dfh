@@ -25,6 +25,10 @@ func ParseStartTime(td string, starttime string, baseTime time.Time) (time.Time,
 		return CalStartDate(dur, baseTime), nil
 	}
 
+	if td == "" && starttime == "" {
+		return time.Time{}, nil
+	}
+
 	// TODO
 	return time.Time{}, errors.New("Not Impl.")
 }
