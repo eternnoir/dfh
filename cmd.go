@@ -22,14 +22,14 @@ func InitCommands(app *cli.App) {
 		{
 			Name:    "remove",
 			Aliases: []string{"rm"},
-			Usage:   "remove files.",
+			Usage:   "Remove files.",
 			Flags:   getFlags(),
 			Action:  removeAction,
 		},
 		{
 			Name:    "find",
 			Aliases: []string{"f"},
-			Usage:   "find files.",
+			Usage:   "Find files.",
 			Flags:   getFlags(),
 			Action:  findAction},
 	}
@@ -145,9 +145,9 @@ func removeAction(c *cli.Context) error {
 	if err != nil {
 		return cli.NewExitError(fmt.Sprintf("Walk Path error. [Message] %s", err), 4)
 	}
-	printPath(dirs)
-	printPath(paths)
 	if !params.Force {
+		printPath(dirs)
+		printPath(paths)
 		fmt.Print("Are you sure remove these file? (Y/N) ")
 		var check string
 		fmt.Scanln(&check)
