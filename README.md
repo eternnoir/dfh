@@ -6,7 +6,7 @@ Datetime base file helper.
 ```
 $ ./dfh
 NAME:
-   dfh - Datetime base file helper. Easy to remove/move/find files by datetime.
+   dfh - Datetime base file helper. Easy to remove/find files by datetime or time duration.
 
 USAGE:
    dfh [global options] command [command options] [arguments...]
