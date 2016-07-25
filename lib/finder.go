@@ -41,13 +41,12 @@ func (finder *FileWalker) findFile(root string) ([]string, []string, error) {
 	}
 
 	for _, f := range files {
-		if !finder.Dir && f.IsDir() {
-			continue
-		}
 		if finder.checkDate(f) {
 			fp := filepath.Join(abs, f.Name())
 			if f.IsDir() {
-				retDir = append(retDir, fp)
+				if finder.Dir || finder.DirOnly {
+					retDir = append(retDir, fp)
+				}
 			} else {
 				if !finder.DirOnly {
 					ret = append(ret, fp)
@@ -66,11 +65,6 @@ func (finder *FileWalker) findFileRecursive(root string) ([]string, []string, er
 			return nil
 		}
 
-		// If Dir param not be set. skip.
-		if !finder.Dir && info.IsDir() {
-			return nil
-		}
-
 		if err != nil {
 			return err
 		}
@@ -81,7 +75,9 @@ func (finder *FileWalker) findFileRecursive(root string) ([]string, []string, er
 			}
 
 			if info.IsDir() {
-				retDir = append(retDir, fp)
+				if finder.Dir || finder.DirOnly {
+					retDir = append(retDir, fp)
+				}
 			} else {
 				if !finder.DirOnly {
 					ret = append(ret, fp)
