@@ -38,7 +38,7 @@ func InitCommands(app *cli.App) {
 func getFlags() []cli.Flag {
 	return []cli.Flag{
 		cli.StringFlag{
-			Name:  "outtime, o",
+			Name:  "duration, d",
 			Value: "",
 			Usage: "How many time duration ago? eg. 24h",
 		},
@@ -60,8 +60,12 @@ func getFlags() []cli.Flag {
 			Usage: "Force, without asking.",
 		},
 		cli.BoolFlag{
-			Name:  "dir, d",
+			Name:  "dir, D",
 			Usage: "Search directory.",
+		},
+		cli.BoolFlag{
+			Name:  "dironly, DO",
+			Usage: "Search directory only.",
 		},
 	}
 }
@@ -73,12 +77,13 @@ type Params struct {
 	Force     bool
 	Include   bool
 	Dir       bool
+	DirOnly   bool
 	Path      string
 }
 
 func ParseFlags(c *cli.Context) (Params, error) {
 	timetemplateFlag := c.GlobalString("timetemplate")
-	outtimeFlag := c.String("outtime")
+	outtimeFlag := c.String("duration")
 	basetimeFlag := c.String("basetime")
 	if c.NArg() < 1 {
 		return Params{}, errors.New("Please give path.")
@@ -103,12 +108,13 @@ func ParseFlags(c *cli.Context) (Params, error) {
 		Force:     c.Bool("force"),
 		Include:   c.Bool("include"),
 		Dir:       c.Bool("dir"),
+		DirOnly:   c.Bool("dironly"),
 		Path:      c.Args()[0],
 	}, nil
 }
 
 func CreateFinder(param *Params) (lib.FileFInder, error) {
-	return lib.NewFileFinder(param.StartTime, param.EndTime, param.Recursive, param.Include, param.Dir)
+	return lib.NewFileFinder(param.StartTime, param.EndTime, param.Recursive, param.Include, param.Dir, param.DirOnly)
 }
 
 func findAction(c *cli.Context) error {

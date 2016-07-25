@@ -17,6 +17,7 @@ type FileWalker struct {
 	Recursive bool
 	Include   bool
 	Dir       bool
+	DirOnly   bool
 }
 
 func (finder *FileWalker) FindFiles(root string) ([]string, []string, error) {
@@ -48,7 +49,9 @@ func (finder *FileWalker) findFile(root string) ([]string, []string, error) {
 			if f.IsDir() {
 				retDir = append(retDir, fp)
 			} else {
-				ret = append(ret, fp)
+				if !finder.DirOnly {
+					ret = append(ret, fp)
+				}
 			}
 		}
 	}
@@ -63,6 +66,7 @@ func (finder *FileWalker) findFileRecursive(root string) ([]string, []string, er
 			return nil
 		}
 
+		// If Dir param not be set. skip.
 		if !finder.Dir && info.IsDir() {
 			return nil
 		}
@@ -79,7 +83,9 @@ func (finder *FileWalker) findFileRecursive(root string) ([]string, []string, er
 			if info.IsDir() {
 				retDir = append(retDir, fp)
 			} else {
-				ret = append(ret, fp)
+				if !finder.DirOnly {
+					ret = append(ret, fp)
+				}
 			}
 		}
 		return nil
@@ -100,12 +106,13 @@ func (finder *FileWalker) checkDate(info os.FileInfo) bool {
 	}
 }
 
-func NewFileFinder(startTime, endTime time.Time, recursive, include, dir bool) (FileFInder, error) {
+func NewFileFinder(startTime, endTime time.Time, recursive, include, dir, dironly bool) (FileFInder, error) {
 	return &FileWalker{
 		StartTime: startTime,
 		EndTime:   endTime,
 		Recursive: recursive,
 		Include:   include,
 		Dir:       dir,
+		DirOnly:   dironly,
 	}, nil
 }
