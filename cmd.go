@@ -131,8 +131,8 @@ func findAction(c *cli.Context) error {
 		return cli.NewExitError(fmt.Sprintf("Walk Path error. [Message] %s", err), 4)
 	}
 
-	printPath(dirs)
-	printPath(paths)
+	printPath("DIR", dirs)
+	printPath("FIL", paths)
 
 	return nil
 
@@ -152,8 +152,8 @@ func removeAction(c *cli.Context) error {
 		return cli.NewExitError(fmt.Sprintf("Walk Path error. [Message] %s", err), 4)
 	}
 	if !params.Force {
-		printPath(dirs)
-		printPath(paths)
+		printPath("DIR", dirs)
+		printPath("FIL", paths)
 		fmt.Print("Are you sure remove these file? (Y/N) ")
 		var check string
 		fmt.Scanln(&check)
@@ -182,8 +182,8 @@ func removeFiles(paths []string) {
 	wg.Wait()
 }
 
-func printPath(paths []string) {
+func printPath(prefix string, paths []string) {
 	for _, p := range paths {
-		fmt.Println(p)
+		fmt.Printf("[%s] %s\n", prefix, p)
 	}
 }
